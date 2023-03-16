@@ -1,6 +1,7 @@
 import {Engine, engine, Ent} from "./engine";
 import {vec} from "./planck";
-import {Body, Circle} from "planck";
+import {Body, Circle, Contact, Fixture} from "planck";
+import {Barrel} from "./Barrel";
 
 export class Player extends Ent {
     body: Body
@@ -49,5 +50,12 @@ export class Player extends Ent {
         ctx.shadowBlur = 10
         ctx.fillCircle(this.body.pos, 0.5, '#b96767')
         ctx.restore()
+    }
+
+    beginContact(contact: Contact, other: Ent, thisFixture: Fixture, otherFixture: Fixture) {
+        if (other instanceof Barrel) {
+            let dir = other.body.pos.clone().sub(this.body.pos).normal()
+            other.body.applyLinearImpulse(dir.mul(20), other.body.pos, true)
+        }
     }
 }
