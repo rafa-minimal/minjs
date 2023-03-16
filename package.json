@@ -11,5 +11,10 @@
   "devDependencies": {
     "typescript": "^4.9.3",
     "vite": "^4.1.0"
+  },
+  "dependencies": {
+    "@types/color": "^3.0.3",
+    "color": "^4.2.3",
+    "planck": "^1.0.0-alpha.4"
   }
 }

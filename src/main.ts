@@ -1,23 +1,51 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import { setupCounter } from './counter'
+import {Engine, EngineConfig, setEngine, SmoothCamera} from "./engine";
+import {vec} from "./planck";
+import {Player} from "./Player";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+let canvas = document.getElementById('canvas') as HTMLCanvasElement
+
+class Game extends Engine {
+    viewport = 20
+
+    camera = new SmoothCamera(0, 0, 20, 20)
+    bgColor = '#6c6c6c'
+
+    constructor(conf: EngineConfig) {
+        super(conf)
+        this.camera.fit(this.viewport)
+        this.camera.setPos(vec(0, 0))
+        this.onkeydown('KeyS', () => {this.step = true; console.log('tick')})
+        this.onkeydown('KeyP', () => {this.pause = !this.pause; console.log('pause: ' + this.pause)})
+        this.onkeydown('KeyD', () => { this.renderWorld = !this.renderWorld })
+        this.onkeydown('KeyR', () => { this.init() })
+    }
+
+    onResize() {
+    }
+
+    init() {
+        this.camera.zoom = 1
+        this.ecs.clear()
+        this.add(new Player())
+    }
+
+    render(timeMs: number) {
+        super.render(timeMs);
+    }
+
+    update(stepSec: number) {
+        super.update(stepSec);
+    }
+
+    glRender(gl: WebGLRenderingContext) {
+    }
+}
+
+let game = new Game({
+    canvas: canvas,
+    fullScreen: true,
+    gravity: vec(0, 0)
+})
+setEngine(game)
+game.init()
