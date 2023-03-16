@@ -1,6 +1,8 @@
 import {Engine, EngineConfig, setEngine, SmoothCamera} from "./engine";
 import {vec} from "./planck";
 import {Player} from "./Player";
+import {Barrel} from "./Barrel";
+import {repeat} from "./global";
 
 
 let canvas = document.getElementById('canvas') as HTMLCanvasElement
@@ -28,6 +30,10 @@ class Game extends Engine {
         this.camera.zoom = 1
         this.ecs.clear()
         this.add(new Player())
+        repeat(20, () => {
+
+            this.add(new Barrel())
+        })
     }
 
     render(timeMs: number) {
